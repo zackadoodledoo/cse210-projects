@@ -1,7 +1,11 @@
+using System;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
 public class Journal
 {
     public List<Entry> _entries = new List<Entry>();
-    public string _fileName = "";
+    private string _fileName = "";
 
     public Journal()
     {
@@ -10,13 +14,51 @@ public class Journal
 
     public void Display()
     {
+        Console.WriteLine("Journal Entries: ");
         //Display each entry in _entries
         foreach (Entry entry in _entries)
         {
             entry.Display();
         }
+
+        Console.WriteLine("\n*********** End ***********");
+    }
+    public void CreateJournalFile()
+    //Method to check if text file is created if not create one
+    {
+        Console.WriteLine("What would you like to name your file? ");
+        string userInput = Console.ReadLine();
+        _fileName = userInput + ".txt";
+
+        if (!File.Exists(_fileName))
+        {
+            File.Create(_fileName);
+            Console.WriteLine($"\n*** {_fileName} File created successfully!***\n");
+            Console.WriteLine("*** Your journal entries have been saved! ***\n");
+            SaveJournalFile(_fileName);
+            CreateJSON(userInput);
+        }   
+        else
+        {
+            Console.WriteLine($"\n*** {_fileName} File already exists!***\n");
+            Console.WriteLine("*** Your journal entries have been loaded! ***\n");
+            AppendJournalFile(_fileName);
+        }
     }
 
+    public void SaveJournalFile(string fileName)
+    // Method to save journal to text file
+    {
+        using (StreamWriter outputFile = new StreamWriter(fileName))
+        {
+            foreach (Entry entry in _entries)
+            {
+                outputFile.WriteLine($"{entry._entryNumber}; {entry._dateTime}; {entry._promptText}; {entry._entryText}");
+            }
+        }
+        //Save each entry in _entries to file
+
+    }
     public void Load(string file)
     {
         //Load each entry from file into _entries
