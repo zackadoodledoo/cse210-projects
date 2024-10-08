@@ -1,7 +1,8 @@
-public class PromptGenerator
+using System;
+public class JournalPrompt
 {
 
-    public List<string> _prompts = new List<string>() {
+    public static string[] _prompt = {
         "How are you?",
         "What is your name?",
         "What are you doing?",
@@ -14,15 +15,28 @@ public class PromptGenerator
         "What is your favorite book?",
         "What is your favorite TV show?",
     };
-    
+    public List<string> _journalPrompt = new List<string> (_prompt);
 
-
-    public string GetRandomPrompt()
+    public JournalPrompt()
     {
-        //Choose a random prompt from _prompts
-        Random randomGenerator = new Random();
-        int index = randomGenerator.Next(0, _prompts.Count);
-        string randomPrompt = _prompts[index];
-        return "A random prompt: ";
+
     }
+
+    public void Display()
+    {
+        var random = new Random();
+        int index = random.Next(_journalPrompt.Count);
+        string journalPrompt = _journalPrompt[index];
+        Console.WriteLine($"\n{_journalPrompt}");
+    }
+
+    public string GetPrompt()
+    {
+        var random = new Random();
+        int index = random.Next(_journalPrompt.Count);
+        string journalPrompt = _journalPrompt[index];
+
+        return journalPrompt;
+    }
+
 }

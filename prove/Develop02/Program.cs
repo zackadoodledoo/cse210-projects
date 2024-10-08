@@ -1,4 +1,5 @@
 using System;
+using System.Security.Cryptography;
 
 class Program
 {
@@ -7,57 +8,62 @@ class Program
 
         // Test Code
 
-        Entry e = new Entry();
-        e._date = "Today";
-        e._promptText = "How are you feeling? ";
-        e._entryText = "I am well. ";
-
-        e.Display();
-
+        int[] validNumbers = { 1, 2, 3, 4, 5 };
+        int action = 0;
         Console.WriteLine("Welcome to the Journal Program!");
-        String choice;
-        do
+
+        Journal journal = new Journal();
+        JournalPrompt jp = new JournalPrompt();
+
+        while (action != 5)
         {
-            Console.WriteLine("Please choose one of the following choices: ");
-            Console.WriteLine("1. Write");
-            Console.WriteLine("2. Display");
-            Console.WriteLine("3. Load");
-            Console.WriteLine("4. Save");
-            Console.WriteLine("5. Quit");
-            Console.WriteLine("What would you like to do? Please Choose 1, 2, 3, 4, or 5.");
-            choice = Console.ReadLine();
-            if (choice == "1")
+            //Ask for user input (1-5)
+            //Call choices
+            action = Choices();
+
+            switch (action)
             {
-                //Create a new entry object to pass to the journal for storage
-                Console.WriteLine("What would you like to write? ");
-                Entry newEntry = new Entry();
-                newEntry._date = Console.ReadLine();
-                newEntry._promptText = Console.ReadLine();
-                newEntry._entryText = Console.ReadLine();
-                newEntry.Display();
-            }
-            else if (choice == "2")
-            {
-            
-            }
-            else if (choice == "3")
-            {
-                
-            }
-            else if (choice == "4")
-            {
-                
-            }
-            else if (choice == "5")
-            {
-                Console.WriteLine("Goodbye!");
-            }
-            else
-            {
-                Console.WriteLine("Invalid choice. Please try again! ");
-            }
-            Console.WriteLine();
-        } 
-        while (choice != "5");
-    }
-}
+                case 1:
+                    //Write journal entry
+                    string entryId = GetEntryId();
+                    string dateInfo = GetDateTime();
+                    string prompt = jp.GetPrompt();
+
+                    JournalEntry entry = new JournalEntry();
+                    entry._entryNumber = entryId;
+                    entry._dateTime = dateInfo;
+                    entry._journalPrompt = prompt;
+
+                    Console.WriteLine($"{prompt}\n");
+                    Console.Write(">>> ");
+                    string userEntry = Console.ReadLine();
+                    entry._journalEntry = userEntry;
+
+                    journal._journal.Add(entry);
+                    break;
+
+                case 2:
+                    //Display journal entries
+                    journal.Display();
+                    break;
+
+                case 3:
+                    //Load journal entries
+                    journal.LoadJournalFile();
+                    // Console.WriteLine("Journal entries loaded!");
+                    break;
+
+                case 4:
+                    //Save journal entries
+                    journal.CreateJournalFile();
+                    break;
+
+                case 5:
+                    //Quit
+                    Console.WriteLine("Goodbye!");
+                    break;
+
+                default:
+                    Console.WriteLine("Invalid choice. Please try again.");
+                    break;
+        

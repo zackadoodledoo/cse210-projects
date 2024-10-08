@@ -13,10 +13,6 @@ public class JsonItem
     // new keyword followed by the class name and parentheses
     public JsonItem()
     {
-        ID = "";
-        Date = "";
-        Prompt = "";
-        Entry = "";
-        Text = "";
+      
     }
 }

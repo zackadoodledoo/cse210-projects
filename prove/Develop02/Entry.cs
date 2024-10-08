@@ -1,4 +1,4 @@
-
+using System;
 public class Entry
 {
     public string _entryNumber = "";
@@ -19,6 +19,11 @@ public class Entry
 
     public void Display()
     {
-        Console.WriteLine($"{_date} : {_promptText}");
-        Console.WriteLine(_entryText);
+        Console.WriteLine($"\n#: {_entryNumber}");
+        Console.WriteLine($"{_dateTime}");
+        Console.WriteLine($"{_promptText}");
+        Console.WriteLine($"{_entryText}");
+       
     }
+
+}
