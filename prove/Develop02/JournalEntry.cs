@@ -1,18 +1,16 @@
 using System;
-public class Entry
+public class JournalEntry
 {
     public string _entryNumber = "";
-    public string _date = "";
     public string _dateTime = "";
-    public string _promptText = "";
-    public string _entryText = "";
-    public string _fileName = "";
+    public string _journalPrompt = "";
+    public string _journalEntry = "";
+    public string _journalFile = "";
   
     // A special method, called a constructor that is invoked using the
     // new keyword followed by the class name and parentheses.
-    public Entry() 
+    public JournalEntry() 
     {
-
     }
 
 
@@ -21,8 +19,8 @@ public class Entry
     {
         Console.WriteLine($"\n#: {_entryNumber}");
         Console.WriteLine($"{_dateTime}");
-        Console.WriteLine($"{_promptText}");
-        Console.WriteLine($"{_entryText}");
+        Console.WriteLine($"{_journalPrompt}");
+        Console.WriteLine($"{_journalEntry}");
        
     }
 

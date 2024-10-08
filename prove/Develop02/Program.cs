@@ -1,5 +1,5 @@
 using System;
-using System.Security.Cryptography;
+using System.IO;
 
 class Program
 {
@@ -66,4 +66,65 @@ class Program
                 default:
                     Console.WriteLine("Invalid choice. Please try again.");
                     break;
+            }
+        }
+    }
+
+    static int Choices()
+    //Method to display choices to the user
+    {
+        string choices = @"
+    
+1. Write       
+2. Display
+3. Load
+4. Save
+5. Quit
+What would you like to do? ";
+
+        Console.WriteLine(choices);
+        string userInput = Console.ReadLine();
+        int action = 0;
+        // This block catches any non integer values that are entered
+        try
+        {
+            action = int.Parse(userInput);
+        }
+        catch (FormatException)
+        {
+            action = 0;
+        }
+        catch (Exception exception)
+        {
+            Console.WriteLine(
+                $"An error occurred: {exception.Message}");
+        }
+        return action;
+    }
+    static string GetDateTime()
+    //Method to get date and time for journal record
+    {
+        DateTime now = DateTime.Now;
+        string currentDateTime = now.ToString("F");
+        //Console.WriteLine(now.ToString("F"));
+        //Displays date and time
+        return currentDateTime;
+    }   
+
+    static void AddJournalEntry()
+    //Method to add entry to text file
+    {
+        string MyJournalFile = "MyJournal.txt";
+        File.AppendAllText(MyJournalFile, " ");
+    }
+
+    static string GetEntryId()
+    {
+        Guid entryuuid = Guid.NewGuid();
+        string entryuuisAsString = entryuuid.ToString();
+
+        return entryuuisAsString;
+    }
+    
+}
         

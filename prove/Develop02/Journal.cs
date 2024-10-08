@@ -4,21 +4,21 @@ using System.Text.Json.Serialization;
 
 public class Journal
 {
-    public List<Entry> _entries = new List<Entry>();
-    private string _fileName = "";
+    public List<JournalEntry> _journal = new List<JournalEntry>();
+    //private string _fileName = "MyJournal.txt";
+    private string _userFileName;
 
     public Journal()
     {
-        //Initialize _entries
     }  
 
     public void Display()
     {
-        Console.WriteLine("Journal Entries: ");
+        Console.WriteLine("\nJournal Entries: ");
         //Display each entry in _entries
-        foreach (Entry entry in _entries)
+        foreach (JournalEntry journalEntry in _journal)
         {
-            entry.Display();
+            journalEntry.Display();
         }
 
         Console.WriteLine("\n*********** End ***********");
@@ -28,114 +28,91 @@ public class Journal
     {
         Console.WriteLine("What would you like to name your file? ");
         string userInput = Console.ReadLine();
-        _fileName = userInput + ".txt";
+        _userFileName = userInput + ".txt";
 
-        if (!File.Exists(_fileName))
+        if (!File.Exists(_userFileName))
         {
-            File.Create(_fileName);
-            Console.WriteLine($"\n*** {_fileName} File created successfully!***\n");
+            File.CreateText(_userFileName);
+            Console.WriteLine($"\n*** {_userFileName} File created successfully!***\n");
             Console.WriteLine("*** Your journal entries have been saved! ***\n");
-            SaveJournalFile(_fileName);
+            SaveJournalFile(_userFileName);
             CreateJSON(userInput);
         }   
         else
         {
-            Console.WriteLine($"\n*** {_fileName} File already exists!***\n");
+            Console.WriteLine($"\n*** {_userFileName} File already exists!***\n");
             Console.WriteLine("*** Your journal entries have been loaded! ***\n");
-            AppendJournalFile(_fileName);
+            AppendJournalFile(_userFileName);
         }
     }
 
-    public void SaveJournalFile(string fileName)
+    public void SaveJournalFile(string _userFileName)
     // Method to save journal to text file
     {
-        using (StreamWriter outputFile = new StreamWriter(fileName))
+        using (StreamWriter outputFile = new StreamWriter(_userFileName))
         {
-            foreach (Entry entry in _entries)
+            foreach (JournalEntry journalEntry in _journal)
             {
-                outputFile.WriteLine($"{entry._entryNumber}; {entry._dateTime}; {entry._promptText}; {entry._entryText}");
+                outputFile.WriteLine($"{journalEntry._entryNumber}; {journalEntry._dateTime}; {journalEntry._journalPrompt}; {journalEntry._journalEntry}");
             }
         }
-        //Save each entry in _entries to file
-
     }
-    public void Load(string file)
+
+    public void AppendJournalFile(string _userFileName)
+    // Method to save journal to text file
     {
-        //Load each entry from file into _entries
-        foreach (Entry entry in _entries)
+        using (StreamWriter outputFile = new StreamWriter(_userFileName, append: true))
         {
-            entry.Load(file);
+            foreach (JournalEntry journalEntry in _journal)
+            {
+                outputFile.WriteLine($"{journalEntry._entryNumber}; {journalEntry._journalPrompt}; {journalEntry._journalEntry}");
+            }
+        }
+    }
+    public void LoadJournalFile()
+    {
+        Console.WriteLine("What is your file name?");
+        string userInput = Console.ReadLine();
+        _userFileName = userInput + ".txt";
+        
+        if (File.Exists(_userFileName))
+        {
+            List<string> readText = File.ReadAllLines(_userFileName).Where(arg => !string.IsNullOrWhiteSpace(arg)).ToList();
+            foreach (string line in readText)
+            {
+                string[] entries = line.Split("; ");
+
+                JournalEntry entry = new JournalEntry();
+
+                entry._entryNumber = entries[0];
+                entry._dateTime = entries[1];
+                entry._journalPrompt = entries[2];
+                entry._journalEntry = entries[3];
+
+                _journal.Add(entry);
+            }
         }
     }
 
-    public void Save(string file)
+    public void CreateJSON(string userInput)
+    // Method to create JSON file
     {
-        //Save each entry in _entries to file
-        foreach (Entry entry in _entries)
+        string fileName = userInput + ".json";
+        List<JsonItem> _data = new List<JsonItem>();
+
+        foreach (JournalEntry journalEntry in _journal)
         {
-            entry.Save(file);
+            _data.Add(new JsonItem()
+            {
+                ID = journalEntry._entryNumber,
+                Date = journalEntry._dateTime,
+                Prompt = journalEntry._journalPrompt,
+                Entry = journalEntry._journalEntry
+            });
         }
+        
+        string json = JsonSerializer.Serialize(_data);
+        File.WriteAllText(fileName, json);
     }
 
-    public void AddEntry()
-    {
-        //Create a new entry object and add it to _entries
-        Entry newEntry = new Entry();
-        _entries.Add(newEntry);
-    }
-
-    public void AddEntry(string date, string promptText, string entryText)
-    {
-        //Create a new entry object and add it to _entries
-        Entry newEntry = new Entry();
-        newEntry._date = date;
-        newEntry._promptText = promptText;
-        newEntry._entryText = entryText;
-        _entries.Add(newEntry);
-    }
-
-    public void AddEntry(string date, string promptText)
-    {
-        //Create a new entry object and add it to _entries
-        Entry newEntry = new Entry();
-        newEntry._date = date;
-        newEntry._promptText = promptText;
-        _entries.Add(newEntry);
-    }
-    
-
-    public void AddEntry(Entry newEntry)
-    {
-        //Add to the list of entries into _entries
-        _entries.Add(newEntry);
-    }
-
-    public void DisplayAll()
-    {
-        //Display each entry in _entries
-        foreach (Entry entry in _entries)
-        {
-            entry.Display();
-        }
-    }
-
-    public void SaveToFile(string file)
-    {
-        //Save each entry in _entries to file
-        foreach (Entry entry in _entries)
-        {
-            //Save each entry in _entries to file
-            entry.Save(file);
-        }
-    }
-
-    public void loadFromFile(string file)
-    {
-        //Load each entry from file into _entries
-        foreach (Entry entry in _entries)
-        {
-            //Load each entry from file into _entries
-            entry.Load(file);
-        }
-    }
 }

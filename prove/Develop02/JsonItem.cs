@@ -7,7 +7,7 @@ public class JsonItem
     public string Date { get; set; }
     public string Prompt { get; set; }
     public string Entry { get; set; }
-    public string Text { get; set; }
+
 
     // A special method, called a constructor that is invoked using the
     // new keyword followed by the class name and parentheses
