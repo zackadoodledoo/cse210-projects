@@ -20,7 +20,7 @@ public class SimpleGoal : Goal
 
     public override void CreateChildGoal()
     {
-        CreateChildGoal();
+        CreateBaseGoal();
     }
 
     public override void RecordEvent()
