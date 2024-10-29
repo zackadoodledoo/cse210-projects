@@ -4,6 +4,23 @@ class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello Foundation3 World!");
+        List<Exercise> exerciseList = new List<Exercise>();
+
+        Running running = new Running("October 28, 2024", 30, 4.8);
+        exerciseList.Add(running);
+
+        StationaryBicycles stationaryBicycles = new StationaryBicycles("October 29, 2024", 60, 15);
+        exerciseList.Add(stationaryBicycles);
+
+        Swimming swimming = new Swimming("October 30, 2024", 20, 20);
+        exerciseList.Add(swimming);
+
+        Console.WriteLine("Exercises:" );
+        Console.WriteLine();
+
+        foreach (Exercise exercise in exerciseList)
+        {
+            Console.WriteLine(exercise.GetSummary());
+        }
     }
 }
